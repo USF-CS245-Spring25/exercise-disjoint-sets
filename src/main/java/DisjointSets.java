@@ -3,7 +3,7 @@
  * This class is used in Kruskal's.
  * */
 public class DisjointSets {
-    private int[] parent; // array of parent indices
+    private int[] parent; // array of parent indices; for the roots, stores -rank
 
     /**
      * Place each vertex into a separate set
@@ -25,8 +25,10 @@ public class DisjointSets {
         if (x < 0 || x >= parent.length)
             throw new IllegalArgumentException();
         // FILL IN CODE: go up the tree, until you reach the "root" of the tree (representative of the set)
-
-        return x;
+       while(parent[x] >= 0) {
+           x = parent[x];
+       }
+       return x;
     }
 
     /**
@@ -37,9 +39,24 @@ public class DisjointSets {
     public void union(int x, int y) {
         // FILL IN CODE
         // find the roots
+        int rootx = find(x);
+        int rooty = find(y);
+
         // if the roots are the same, do nothing since x, y are already in the same set
+        if (rootx == rooty) // same set, no need to merge
+            return;
 
         // Point the shorter tree to the taller tree
+        if (parent[rootx] < parent[rooty]) {
+            parent[rooty] = rootx;
+        }
+        else {
+            if (parent[rootx] == parent[rooty]) {
+                parent[rooty]--;
+            }
+            parent[rootx] = rooty;
+        }
+
 
     }
 
